@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pembayaran BankSoall</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #2c3e50;
+    }
+
+    header {
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 200px;
+      height: auto;
+    }
+
+    nav {
+      transition: transform 0.3s ease;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-left: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #2c3e50;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #f7b200;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #2c3e50;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        background-color: #ffffff;
+        transform: translateX(-100%);
+        flex-direction: column;
+        padding-top: 80px;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      }
+
+      nav.active {
+        transform: translateX(0);
+      }
+
+      nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 20px;
+      }
+
+      nav ul li {
+        margin: 15px 0;
+      }
+    }
+
+    main {
+      padding: 60px 0;
+      text-align: center;
+      min-height: calc(100vh - 200px);
+    }
+
+    .qris-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .qris-description {
+      font-size: 1rem;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .qris-image {
+      width: 300px;
+      max-width: 80%;
+      margin: 0 auto 30px;
+      border: 4px solid #2c3e50;
+      border-radius: 8px;
+      background-color: #ffffff;
+      padding: 10px;
+      display: block;
+    }
+
+    .qris-form {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .qris-form label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .qris-form input[type="email"],
+    .qris-form select,
+    .qris-form input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .qris-form input:focus,
+    .qris-form select:focus {
+      border-color: #2c3e50;
+      outline: none;
+    }
+
+    .btn-submit {
+      background-color: #2c3e50;
+      color: #ffffff;
+      padding: 14px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      font-size: 1rem;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      background-color: #1a252f;
+      transform: translateY(-2px);
+    }
+
+    .btn-submit:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+    }
+
+    footer {
+      background-color: #2c3e50;
+      color: #ffffff;
+      padding: 50px 0 20px;
+      margin-top: 50px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .footer-column h3 {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+      color: #bdc3c7;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-column ul li a:hover {
+      color: #ffffff;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      color: #ffffff;
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #34495e;
+      color: #bdc3c7;
+      font-size: 0.9rem;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(44, 62, 80, 0.3);
+      border-radius: 50%;
+      border-top: 3px solid #2c3e50;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .success-message {
+      color: #2ecc71;
+      text-align: center;
+      margin: 15px 0;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <img src="img/Screenshot 2025-07-01 224225-Pica.png" alt="Logo BankSoall">
+        </a>
+
+        <button class="menu-toggle" id="menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <nav id="nav-menu">
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="#Social Media 1">Social Media</a></li>
+            <li><a href="https://whatsapp.com/channel/0029Vb5hJYwJkK7Fi8i2pM3l">Komunitas</a></li>
+            <li><a href="https://wa.me/6287738256346?text=Hallo%20saya%20mau%20chat%20admin">Kontak</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="qris-title">Pembayaran BankSoall</h1>
+      <p class="qris-description">
+        Scan QRIS di bawah ini untuk membeli paket soal.<br>
+        Setelah pembayaran, harap konfirmasi melalui form berikut.
+      </p>
+
+      <img src="img/qris.jpg" alt="Kode QRIS BankSoall" class="qris-image">
+
+      <div class="qris-form">
+        <form id="payment-form" enctype="multipart/form-data" method="post">
+          <div id="successMessage" class="success-message">
+            Pembayaran berhasil dikirim! Anda akan diarahkan ke halaman sukses...
+          </div>
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="contoh@email.com">
+          <div id="emailError" class="error-message">Harap masukkan email yang valid</div>
+
+          <label for="paket">Pilih Paket Soal</label>
+          <select id="paket" name="paket" required>
+            <option value="">-- Pilih Paket --</option>
+            <option value="UTBK Paket 1">UTBK Paket 1</option>
+            <option value="SKD Paket 1">SKD Paket 1</option>
+          </select>
+          <div id="paketError" class="error-message">Harap pilih paket soal</div>
+
+          <label for="platform">Metode Pembayaran</label>
+          <select id="platform" name="platform" required>
+            <option value="">-- Pilih Metode --</option>
+            <option value="QRIS">QRIS</option>
+            <option value="Gopay">Gopay</option>
+            <option value="OVO">OVO</option>
+            <option value="DANA">DANA</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+          <div id="platformError" class="error-message">Harap pilih metode pembayaran</div>
+
+          <label for="bukti">Upload Bukti Pembayaran</label>
+          <input type="file" id="bukti" name="bukti" accept="image/*, .pdf" required>
+          <div id="buktiError" class="error-message">Harap upload bukti pembayaran</div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span id="submitText">Konfirmasi Pembayaran</span>
+          </button>
+          
+          <div class="loading" id="loadingIndicator">
+            <div class="loading-spinner"></div> 
+            <span>Memproses pembayaran...</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div id="Social Media 1" class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Tentang Kami</h3>
+          <p>Platform latihan soal online terlengkap untuk membantu siswa dalam persiapan ujian.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Paket Soal</h3>
+          <ul>
+            <li><a href="UTBK.html">UTBK</a></li>
+            <li><a href="SKD.html">SKD</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Link Cepat</h3>
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="#Social Media 1">Social Media</a></li>
+            <li><a href="https://whatsapp.com/channel/0029Vb5hJYwJkK7Fi8i2pM3l">Komunitas</a></li>
+            <li><a href="https://wa.me/6287738256346?text=Hallo%20saya%20mau%20chat%20admin[Banksoall]">Kontak</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Hubungi Kami</h3>
+          <p>banksoall1708@gmail.com</p>
+          <p>+62 7738 256 346</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="https://x.com/banksoall?t=G2Z8gQ1YbMHmnz1eS-Yzhw&s=09"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/banksoall/?utm_source=ig_web_button_share_sheet"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; 2025 Banksoall.com. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  // Toggle menu mobile
+  const menuBtn = document.getElementById('menu-btn');
+  const navMenu = document.getElementById('nav-menu');
+
+  menuBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+
+  // Tutup menu jika klik link
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('active');
+    });
+  });
+
+  // Validasi dan submit form
+  const form = document.getElementById('payment-form'); // pastikan form-mu pakai id="payment-form"
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); // mencegah reload
+
+    let isValid = true;
+
+    const email = document.getElementById('email').value.trim();
+    const paket = document.getElementById('paket').value;
+    const platform = document.getElementById('platform').value;
+    const buktiInput = document.getElementById('bukti');
+    const bukti = buktiInput.files[0];
+
+    // Validasi email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById('emailError').style.display = 'block';
+      isValid = false;
+    } else {
+      document.getElementById('emailError').style.display = 'none';
+    }
+
+    // Validasi paket
+    if (!paket) {
+      document.getElementById('paketError').style.display = 'block';
+      isValid = false;
+    } else {
+      document.getElementById('paketError').style.display = 'none';
+    }
+
+    // Validasi platform
+    if (!platform) {
+      document.getElementById('platformError').style.display = 'block';
+      isValid = false;
+    } else {
+      document.getElementById('platformError').style.display = 'none';
+    }
+
+    // Validasi file bukti
+    if (!bukti) {
+      document.getElementById('buktiError').style.display = 'block';
+      isValid = false;
+    } else {
+      document.getElementById('buktiError').style.display = 'none';
+    }
+
+    // Jika semua valid, kirim
+    if (isValid) {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("paket", paket);
+      formData.append("metode", platform);
+      formData.append("bukti", bukti);
+
+      fetch("https://c5flsx3z-5000.asse.devtunnels.ms/submit", {
+        method: "POST",
+        body: formData,
+      })
+        .then(res => res.json())
+        .then(result => {
+          if (result.message) {
+            alert("Berhasil terkirim!");
+            window.location.href = "sukses.html";
+          } else {
+            alert("Gagal: " + (result.error || "Tidak diketahui"));
+          }
+        })
+        .catch(err => {
+          alert("Terjadi error: " + err.message);
+        });
+    }
+  });
+</script>
